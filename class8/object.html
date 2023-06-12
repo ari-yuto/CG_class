@@ -56,13 +56,13 @@
         // テクスチャー2読み込み
         var textureLoader2 = new THREE.TextureLoader();  
         var texture2 = textureLoader2.load("wood.jpeg");
-        var mat2 = new THREE.MeshPhongMaterial();
+        var mat2 = new THREE.MeshLambertMaterial();
         mat2.map = texture2;
 
         // テクスチャー3読み込み
         var textureLoader3 = new THREE.TextureLoader();  
         var texture3 = textureLoader3.load("snow.jpg");
-        var mat3 = new THREE.MeshPhongMaterial();
+        var mat3 = new THREE.MeshLambertMaterial();
         mat3.map = texture3;
 
         // 球1を作成
@@ -82,10 +82,12 @@
         scene.add( sphere2 );
 
         //円柱1
-        var cylinderGeometry1 = new THREE.CylinderGeometry(0.05,0.05,2.5)
+        var cylinderGeometry1 = new THREE.CylinderGeometry(0.05,0.05,0.7)
         var cylinder1 = new THREE.Mesh(cylinderGeometry1,mat2);
-        cylinder1.position.set(0,0.4,0);
-        cylinder1.rotation.set(Math.PI/2,0,0);
+        cylinder1.position.set(0.8,0.4,0);
+        cylinder1.rotation.set(Math.PI/2,Math.PI/6,Math.PI/2);
+        const radius = 1;
+        let degree = 0;
         scene.add(cylinder1);
 
         update();
@@ -97,9 +99,19 @@
           requestAnimationFrame(update);
 
             // 球を回転させる
+          //degree1 +=0.01;
           sphere1.rotation.y += 0.01;
           sphere2.rotation.y += 0.01;
-          cylinder1.rotation.z -=0.01;
+          //cylinder1.rotation.z -=0.01;
+          degree -=1;
+          const rad = degree * Math.PI/180;
+          //const theta = (degree - 180) * Math.PI / 180;
+          const x = radius * Math.cos(rad);
+          //const y = radius * Math.cos(rad);
+          const z = radius * Math.sin(rad);
+          cylinder1.position.set(x,0.4,z);
+          cylinder1.rotation.y +=0.01;
+
         }
       }
     </script>
