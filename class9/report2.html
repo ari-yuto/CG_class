@@ -1,0 +1,106 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script src="https://unpkg.com/three@0.137.4/build/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.137.4/examples/js/controls/OrbitControls.js"></script>
+  </head>
+<body>
+ <h1>レポート</h1>
+ コメント<br>
+ <script>
+      // ページの読み込みを待つ
+      window.addEventListener('DOMContentLoaded', init);
+
+      function init() {
+        // サイズを指定
+        const width = 800
+        const height = 600;
+
+        // レンダラーを作成
+        var renderer = new THREE.WebGLRenderer();
+        document.body.appendChild(renderer.domElement);
+        renderer.setSize(width, height);
+        // 背景の色を設定
+        renderer.setClearColor(0x4c4848);
+
+
+        // シーンを作成
+        const scene = new THREE.Scene();
+
+        // カメラを作成
+        const camera = new THREE.PerspectiveCamera(45, width / height);
+        // カメラの初期座標を設定
+        camera.position.set(0, 0, 5);
+
+        // カメラコントローラーを作成
+        const controls = new THREE.OrbitControls(camera, document.body); 
+        
+        // 平行光源1
+        var directionalLight1 = new THREE.DirectionalLight(0xffffff);
+        directionalLight1.position.set(10, 10, 10);
+        // シーンに追加
+        scene.add(directionalLight1);
+        // 平行光源2
+        var directionalLight2 = new THREE.DirectionalLight(0x888888);
+        directionalLight2.position.set(-10, -10, 10);
+        // シーンに追加
+        scene.add(directionalLight2);
+
+        // helper
+        const gridHelper = new THREE.GridHelper(2,10); // size, step
+        scene.add(gridHelper);
+        const axisHelper = new THREE.AxisHelper(2); //軸の長さ　X：赤、Y：緑、z：青
+        scene.add(axisHelper);
+
+        // 石の柱をスプライトで作成
+        var textureLoader = new THREE.TextureLoader();  
+        var texture = textureLoader.load("img/stone stick.png");
+        const material = new THREE.SpriteMaterial(({ map: texture,}));
+
+        //人をスプライトで作成
+        var textureLoader1 = new THREE.TextureLoader();
+        var texture1 = textureLoader1.load("img/DIO.png"); 
+        const material1 = new THREE.SpriteMaterial(({ map: texture1,}));
+
+        //月をスプライトで作成
+        var textureLoader2 = new THREE.TextureLoader();
+        var texture2 = textureLoader2.load("img/moon.png"); 
+        const material2 = new THREE.SpriteMaterial(({ map: texture2,}));
+
+
+        // たくさん石の柱を作成
+        for (let i = 0; i < 8; i++) {
+          const sprite = new THREE.Sprite(material);
+          // ランダムな座標に配置
+          sprite.position.x = 2 * (Math.random() - 0.5);
+          sprite.position.y = 0.5;
+          sprite.position.z = 2 * (Math.random() - 0.5);
+          // スケールを調整
+          sprite.scale.set(1.5, 1.5, 1.5);
+
+          scene.add(sprite);
+        }
+
+        // 人を生成
+        const dio = new THREE.Sprite(material1);
+        dio.scale.set(0.8,0.8,0.8);
+        dio.position.set(0,0.5,0);
+        scene.add(dio);
+
+        // 月を生成
+        const moon = new THREE.Sprite(material2);
+        moon.scale.set(1,1,1);
+        moon.position.set(0,2,0);
+        scene.add(moon);
+        
+        update();
+
+        // 毎フレーム時に実行されるループイベントです
+        function update() {
+          // レンダリング
+          renderer.render(scene, camera);
+          requestAnimationFrame(update);
+        }
+      }
+    </script>
+</body>
