@@ -5,8 +5,9 @@
     <script src="https://unpkg.com/three@0.137.4/examples/js/controls/OrbitControls.js"></script>
   </head>
 <body>
- <h1>レポート</h1>
- コメント<br>
+ <h1>コンピュータグラフィックス課題</h1>
+ 中心に物体とその土台にバンプマップを使用しており、凹凸をわかりやすくしている。<br>
+ 物体の周辺の石の柱と月にはビルボードを利用しており、常にカメラの正面を向くようになっている。
  <script>
       // ページの読み込みを待つ
       window.addEventListener('DOMContentLoaded', init);
@@ -169,13 +170,6 @@
 
           // 球を回転させる
           object.rotation.y += 0.02;
-          /*sphere2.rotation.y += 0.01;
-          degree -=1;
-          const rad = degree * Math.PI/180;
-          const x = radius * Math.cos(rad);
-          const z = radius * Math.sin(rad);
-          /*cylinder1.position.set(x,0.4,z);
-          cylinder1.rotation.y +=0.01;*/
 
         }
       }
