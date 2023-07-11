@@ -1,0 +1,151 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.110/examples/js/controls/OrbitControls.js"></script>
+</head>
+
+<body>
+    <h1>レポート３</h1>
+    あああ<br>
+    <script>
+        // ページの読み込みを待つ
+        window.addEventListener('load', init, );
+
+        function init() {
+            // サイズを指定
+            const width = 960;
+            const height = 540;
+
+            // レンダラーを作成
+            const renderer = new THREE.WebGLRenderer({
+                canvas: document.querySelector('#myCanvas')
+            });
+            renderer.setSize(width, height);
+
+            // シーンを作成
+            const scene = new THREE.Scene();
+
+            // フォグを設定
+            scene.fog = new THREE.Fog(0x000000, 50, 2000);
+
+            // カメラを作成
+            const camera = new THREE.PerspectiveCamera(45, width / height);
+            // カメラの初期座標を設定
+            camera.position.set(0, 0, 1000);
+
+            // カメラコントローラーを作成
+            const controls = new THREE.OrbitControls(camera ,document.getElementById("myCanvas"));
+            // controls.autoRotate = true;
+
+            // helper
+            const gridHelper = new THREE.GridHelper(1000, 20); // size, step
+            scene.add(gridHelper);
+            const axisHelper = new THREE.AxisHelper(1000); //軸の長さ　X：赤、Y：緑、z：青
+            scene.add(axisHelper);
+
+            // テクスチャー読み込み
+            var textureLoader = new THREE.TextureLoader();
+            var texture = textureLoader.load("img/stone.jpeg");
+            var mat = new THREE.MeshLambertMaterial();
+            mat.map = texture;
+
+            // テクスチャー1読み込み
+            var textureLoader1 = new THREE.TextureLoader();
+            var texture1 = textureLoader1.load("img/face.jpg");
+            var mat1 = new THREE.MeshPhongMaterial();
+            mat1.map = texture1;
+
+            // テクスチャー2読み込み
+            var textureLoader2 = new THREE.TextureLoader();
+            var texture2 = textureLoader2.load("img/wood.jpeg");
+            var mat2 = new THREE.MeshLambertMaterial();
+            mat2.map = texture2;
+
+            // テクスチャー3読み込み
+            var textureLoader3 = new THREE.TextureLoader();
+            var texture3 = textureLoader3.load("img/snow.jpg");
+            var mat3 = new THREE.MeshLambertMaterial();
+            mat3.map = texture3;
+
+            // グループを作成
+            const snowman = new THREE.Group();
+            const group = new THREE.Group();
+            scene.add(snowman);
+            scene.add(group);
+
+            var sphereGeometry1 = new THREE.SphereGeometry(0.09, 16, 16);
+            var sphereGeometry2 = new THREE.SphereGeometry(0.15, 16, 16);
+            var cylinderGeometry1 = new THREE.CylinderGeometry(0.01, 0.01, 0.15);
+            var cylinderGeometry2 = new THREE.CylinderGeometry(0.01, 0.01, 0.15);
+
+            for (let i = 0; i < 100; i++) {
+                var sphere1 = new THREE.Mesh(sphereGeometry1, mat1);
+                sphere1.position.set(0, 0.8, 0);
+                sphere1.rotation.set(0, -Math.PI / 2, 0);
+                snowman.add(sphere1);
+                scene.add(snowman);
+
+                // 球2を作成
+                var sphere2 = new THREE.Mesh(sphereGeometry2, mat3);
+                sphere2.position.set(0, 0.4, 0);
+                snowman.add(sphere2);
+                scene.add(snowman);
+                
+
+                //円柱1
+                var cylinder1 = new THREE.Mesh(cylinderGeometry1, mat2);
+                cylinder1.position.set(0.3, 0.5, 0);
+                cylinder1.rotation.set(Math.PI / 2, Math.PI / 6, Math.PI / 2);
+                snowman.add(cylinder1);
+                scene.add(snowman);
+
+                //円柱2
+                var cylinder2 = new THREE.Mesh(cylinderGeometry2, mat2);
+                cylinder2.position.set(-0.3, 0.5, 0);
+                cylinder2.rotation.set(Math.PI / 2, Math.PI * 11 / 6, Math.PI / 2);
+                snowman.add(cylinder2);
+                scene.add(snowman);
+
+
+                snowman.position.x = (Math.random() - 0.5) * 2000;
+                snowman.position.y = (Math.random() - 0.5) * 2000;
+                snowman.position.z = (Math.random() - 0.5) * 2000;
+                snowman.rotation.x = Math.random() * 2 * Math.PI;
+                snowman.rotation.y = Math.random() * 2 * Math.PI;
+                snowman.rotation.z = Math.random() * 2 * Math.PI;
+
+                scene.add(snowman);
+
+            }
+
+            // 光源（環境光）
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+            scene.add(ambientLight);
+
+            // 平行光源
+            var directionalLight1 = new THREE.DirectionalLight(0xffffff, 0.5);
+            directionalLight1.position.set(1000, 1000, 700);
+            // シーンに追加
+            scene.add(directionalLight1);
+
+
+            tick();
+
+            // 毎フレーム時に実行されるループイベントです
+            function tick() {
+                // レンダリング
+                snowman.rotateY(0.01); 
+                renderer.render(scene, camera);
+                requestAnimationFrame(tick);
+            }
+        }
+    </script>
+    </head>
+
+    <body>
+        <canvas id="myCanvas"></canvas>
+    </body>
+
+</html>

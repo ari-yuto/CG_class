@@ -48,8 +48,6 @@ var fire = new VolumetricFire(
   camera
 );
 scene.add( fire.mesh );
-// you can set position, rotation and scale
-// fire.mesh accepts THREE.mesh features
 fire.mesh.position.set( 0, fireHeight / 2, 0 );
 
 
@@ -59,11 +57,7 @@ fire.mesh.position.set( 0, fireHeight / 2, 0 );
 
   var elapsed = clock.getElapsedTime();
 
-  camera.position.set(
-    Math.sin( elapsed * 0.1 ) * 8,
-    Math.sin( elapsed * 0.5 ) * 10,
-    Math.cos( elapsed * 0.1 ) * 8
-  );
+  camera.position.set(7,7,7);
   camera.lookAt( scene.position );
 
   fire.update( elapsed );
