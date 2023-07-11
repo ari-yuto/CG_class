@@ -1,15 +1,18 @@
 <html>
 
 <head>
-    <meta charset="utf-8" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
-    <script src="OrbitControls.js"></script>
+  <meta charset="utf-8" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+  <script src="OrbitControls.js"></script>
 </head>
 
 <body>
-    <h1>レポート３</h1>
-    あああ<br>
-    <html>
+  <h1>レポート３</h1>
+  <p>2132008 有吉勇人</p>
+  パーティクルの性質を使って四角と球をたくさん生成し、前回作成した物体の周りを回転するようにした。<br>
+  また、四角と球に関してはランダムで色が付くようにした。<br>
+  
+  <html>
   <script>
     // ページの読み込みを待つ
     window.addEventListener('load', init);
@@ -41,31 +44,99 @@
       controls.autoRotate = true;
 
       // helper
-      const gridHelper = new THREE.GridHelper(1000, 20); // size, step
-      scene.add(gridHelper);
-      const axisHelper = new THREE.AxisHelper(1000); //軸の長さ　X：赤、Y：緑、z：青
-      scene.add(axisHelper);
+      // const gridHelper = new THREE.GridHelper(1000, 20); // size, step
+      // scene.add(gridHelper);
+      // const axisHelper = new THREE.AxisHelper(1000); //軸の長さ　X：赤、Y：緑、z：青
+      // scene.add(axisHelper);
+
+      // テクスチャー読み込み
+      var textureLoader = new THREE.TextureLoader();  
+        var texture = textureLoader.load("img/stone.jpeg");
+        var mat = new THREE.MeshLambertMaterial();
+        mat.map = texture;
+
+      // テクスチャー1読み込み
+      var textureLoader1 = new THREE.TextureLoader();
+      var texture1 = textureLoader1.load("img/face.jpg");
+      var mat1 = new THREE.MeshPhongMaterial();
+      mat1.map = texture1;
+
+      // テクスチャー2読み込み
+      var textureLoader2 = new THREE.TextureLoader();  
+        var texture2 = textureLoader2.load("img/wood.jpeg");
+        var mat2 = new THREE.MeshLambertMaterial();
+        mat2.map = texture2;
+
+        // テクスチャー3読み込み
+        var textureLoader3 = new THREE.TextureLoader();  
+        var texture3 = textureLoader3.load("img/snow.jpg");
+        var mat3 = new THREE.MeshLambertMaterial();
+        mat3.map = texture3;
+
+        // バンプマップ読み込み
+        var bump = textureLoader.load("img/stone bumpmap.jpg");
+        mat.bumpMap = bump;
+        mat.bumpscale = 0.2;
+
+        var bump1 = textureLoader.load("img/snow bumpmap.png");
+        mat3.bumpMap = bump;
+        mat3.bumpscale = 0.2;
 
       // グループを作成
       const group = new THREE.Group();
       scene.add(group);
-      const geometry = new THREE.BoxGeometry(50, 50, 50);
-      const geometry1 = new THREE.SphereGeometry(50, 50, 50);
-      // const material = new THREE.MeshStandardMaterial({color: 0x00ff00});
+
+      const geometry = new THREE.BoxGeometry(25, 25, 25);
+      const geometry1 = new THREE.SphereGeometry(25, 25, 25);
+
 
       const object = new THREE.Group();
       scene.add(object);
 
-      
+      // 球1を作成
+      const sphereGeometry1 = new THREE.SphereGeometry(30, 32, 32);
+      const sphere1 = new THREE.Mesh(sphereGeometry1, mat1);
+      sphere1.position.set(0, 60, 0);
+      sphere1.rotation.set(0, -Math.PI / 2, 0);
+      object.add(sphere1);
 
-      for (let i = 0; i < 100; i++) {
-        // 色をランダムで設定
-      var color = { r: 0, g: 0, b: 0 };    // RGB 0～255の値で設定
-      for (var g in color) {
-        color[g] = Math.floor(Math.random() * 256);
-      }
-      var myColor = "rgb(" + color.r + ", " + color.g + ", " + color.b + ")";
-        const material = new THREE.MeshStandardMaterial({myColor});
+      // 球2を作成
+      var sphereGeometry2 = new THREE.SphereGeometry( 45, 32, 32 ); 
+        var sphere2 = new THREE.Mesh( sphereGeometry2, mat3 );
+        sphere2.position.set( 0, 0.4, 0 );
+        object.add(sphere2);
+
+        //円柱1
+        var cylinderGeometry1 = new THREE.CylinderGeometry(4,4,100)
+        var cylinder1 = new THREE.Mesh(cylinderGeometry1,mat2);
+        cylinder1.position.set(30,10,0);
+        cylinder1.rotation.set(Math.PI/2,Math.PI/6,Math.PI/2);
+        object.add(cylinder1);
+
+        //円柱2
+        var cylinderGeometry2 = new THREE.CylinderGeometry(4,4,100)
+        var cylinder2 = new THREE.Mesh(cylinderGeometry2,mat2);
+        cylinder2.position.set(-30,10,0);
+        cylinder2.rotation.set(Math.PI/2,Math.PI*11/6,Math.PI/2);
+        object.add(cylinder2);
+        
+        group.add( object );
+
+        //土台を作成
+        var cylinderGeometry = new THREE.CylinderGeometry(50,50,10);
+        var cylinder = new THREE.Mesh(cylinderGeometry,mat);
+        cylinder.position.set(0,-45,0);
+        scene.add(cylinder);
+
+
+      scene.add(object);
+
+      for (let i = 0; i < 300; i++) {
+        var randomColor = "#";
+        for (var g = 0; g < 6; g++) {
+          randomColor += (16 * Math.random() | 0).toString(16);
+        }
+        const material = new THREE.MeshStandardMaterial({ color: randomColor });
         const mesh = new THREE.Mesh(geometry, material);
         group.add(mesh);
         const mesh1 = new THREE.Mesh(geometry1, material);
@@ -84,13 +155,6 @@
         mesh1.rotation.y = Math.random() * 2 * Math.PI;
         mesh1.rotation.z = Math.random() * 2 * Math.PI;
 
-        // object.position.x = (Math.random() - 0.5) * 2000;
-        // object.position.y = (Math.random() - 0.5) * 2000;
-        // object.position.z = (Math.random() - 0.5) * 2000;
-        // object.rotation.x = Math.random() * 2 * Math.PI;
-        // object.rotation.y = Math.random() * 2 * Math.PI;
-        // object.rotation.z = Math.random() * 2 * Math.PI;
-
         // グループに格納する
         group.add(mesh);
         group.add(mesh1);
@@ -104,7 +168,7 @@
       scene.add(ambientLight);
 
       // 平行光源
-      var directionalLight1 = new THREE.DirectionalLight(0xffffff, 0.5);
+      var directionalLight1 = new THREE.DirectionalLight(0xffffff, 1.5);
       directionalLight1.position.set(1000, 1000, 700);
       // シーンに追加
       scene.add(directionalLight1);
@@ -122,8 +186,8 @@
     }
   </script>
 
-<body>
-  <canvas id="myCanvas"></canvas>
-</body>
+  <body>
+    <canvas id="myCanvas"></canvas>
+  </body>
 
-</html>
+  </html>
